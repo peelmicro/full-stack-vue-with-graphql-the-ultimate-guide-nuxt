@@ -14,7 +14,7 @@ export class UsersResolver {
 
   @Mutation(() => User)
   async signupUserWithInput(@Args('input') input: UserInput) {
-    return await this.usersService.signupUserWithInput(input);
+    return await this.usersService.signupUser(input);
   }
   @Mutation(() => User)
   async signupUser(

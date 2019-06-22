@@ -12,7 +12,7 @@ export class UsersService {
     return await this.userModel.find().exec();
   }
 
-  async signupUserWithInput(createUserDto: CreateUserDto): Promise<User> {
+  async signupUser(createUserDto: CreateUserDto): Promise<User> {
 
     const username = createUserDto.username;
     const user = await this.userModel.findOne({ username });
@@ -20,16 +20,6 @@ export class UsersService {
       throw new Error("User already exists");
     }
     const createdUser = new this.userModel(createUserDto);
-    return await createdUser.save();
-  }
-
-  async signupUser({ username, email, password }): Promise<User> {
-
-    const user = await this.userModel.findOne({ username });
-    if (user) {
-      throw new Error("User already exists");
-    }
-    const createdUser = new this.userModel({ username, email, password });
     return await createdUser.save();
   }
 

@@ -8,13 +8,42 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
+type Message {
+  messageBody: String!
+  messageDate: DateTime!
+  messageUser: String!
+}
+
 type Mutation {
   signupUserWithInput(input: UserInput!): User!
   signupUser(password: String!, email: String!, username: String!): User!
+  addPostWithInput(input: PostInput!): Post!
+  addPost(creatorId: String!, description: String!, categories: [String!]!, imageUrl: String!, title: String!): Post!
+}
+
+type Post {
+  _id: ID!
+  title: String!
+  imageUrl: String!
+  categories: [String!]!
+  description: String!
+  createdDate: DateTime!
+  likes: Int!
+  createdBy: User!
+  messages: [Message!]
+}
+
+input PostInput {
+  title: String!
+  imageUrl: String!
+  categories: [String!]!
+  description: String!
+  creatorId: String!
 }
 
 type Query {
   getUsers: [User!]!
+  getPosts: [Post!]!
 }
 
 type User {
