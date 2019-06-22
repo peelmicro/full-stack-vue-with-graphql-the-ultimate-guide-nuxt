@@ -20,9 +20,10 @@ $cd client
 $npm install
 ```
 
-## run server
+## run server and client
+
+- From main folder
 
 ```
-$ cd server
-$ npm run start:dev
+$ npm run dev
 ```
