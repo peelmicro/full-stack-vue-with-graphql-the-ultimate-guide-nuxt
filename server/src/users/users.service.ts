@@ -11,6 +11,7 @@ export class UsersService {
   async getUsers(): Promise<User[] | null> {
     return await this.userModel.find().exec();
   }
+
   async signupUserWithInput(createUserDto: CreateUserDto): Promise<User> {
 
     const username = createUserDto.username;
