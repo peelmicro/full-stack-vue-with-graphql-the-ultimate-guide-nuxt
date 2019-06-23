@@ -1,11 +1,12 @@
 module.exports = {
+  plugins: ['@typescript-eslint','prettier'],
   root: true,
   env: {
     browser: true,
     node: true
   },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@typescript-eslint/parser'
   },
   extends: [
     '@nuxtjs',
@@ -14,11 +15,9 @@ module.exports = {
     'prettier',
     'prettier/vue'
   ],
-  plugins: [
-    'prettier'
-  ],
   // add your custom rules here
   rules: {
+    '@typescript-eslint/no-unused-vars': 'error',
     "vue/component-name-in-template-casing": ["error", "PascalCase"],
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"    

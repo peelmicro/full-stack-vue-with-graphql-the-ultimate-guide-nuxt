@@ -66,36 +66,40 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
+    <v-content>
+      <v-container>
+        <nuxt />
+      </v-container>
+    </v-content>
   </v-app>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      sideNav: false
-    }
-  },
-  computed: {
-    horizontalNavItems() {
-      return [
-        { icon: 'chat', title: 'Posts', link: '/posts' },
-        { icon: 'lock_open', title: 'Sign In', link: '/signin' },
-        { icon: 'create', title: 'Sign Up', link: '/signup' }
-      ]
-    },
-    sideNavItems() {
-      return [
-        { icon: 'chat', title: 'Posts', link: '/posts' },
-        { icon: 'lock_open', title: 'Sign In', link: '/signin' },
-        { icon: 'create', title: 'Sign Up', link: '/signup' }
-      ]
-    }
-  },
-  methods: {
-    toggleSideNav() {
-      this.sideNav = !this.sideNav
-    }
+<script lang="ts">
+import { Vue } from 'vue-property-decorator'
+
+export default class Layout extends Vue {
+  sideNav: boolean = false
+
+  // computed
+  get horizontalNavItems() {
+    return [
+      { icon: 'chat', title: 'Posts', link: '/posts' },
+      { icon: 'lock_open', title: 'Sign In', link: '/signin' },
+      { icon: 'create', title: 'Sign Up', link: '/signup' }
+    ]
+  }
+
+  get sideNavItems() {
+    return [
+      { icon: 'chat', title: 'Posts', link: '/posts' },
+      { icon: 'lock_open', title: 'Sign In', link: '/signin' },
+      { icon: 'create', title: 'Sign Up', link: '/signup' }
+    ]
+  }
+
+  // methods
+  toggleSideNav() {
+    this.sideNav = !this.sideNav
   }
 }
 </script>

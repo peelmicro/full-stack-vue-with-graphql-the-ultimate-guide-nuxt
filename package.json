@@ -21,5 +21,8 @@
   "homepage": "https://github.com/peelmicro/full-stack-vue-with-graphql-the-ultimate-guide-nuxt#readme",
   "devDependencies": {
     "concurrently": "^4.1.0"
+  },
+  "dependencies": {
+    "vue-property-decorator": "^8.2.1"
   }
 }

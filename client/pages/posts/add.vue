@@ -4,8 +4,9 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  name: 'AddPost'
+<script lang="ts">
+import { Vue } from 'vue-property-decorator'
+export default class AddPostPage extends Vue {
+  name: string = 'AddPost'
 }
 </script>

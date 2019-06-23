@@ -4,8 +4,9 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  name: 'Profile'
+<script lang="ts">
+import { Vue } from 'vue-property-decorator'
+export default class Profile extends Vue {
+  name: string = 'Profile'
 }
 </script>

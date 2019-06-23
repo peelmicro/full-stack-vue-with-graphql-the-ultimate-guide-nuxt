@@ -4,8 +4,9 @@
   </v-container>
 </template>
 
-<script>
-export default {
-  name: 'Home'
+<script lang="ts">
+import { Vue } from 'vue-property-decorator'
+export default class HomePage extends Vue {
+  name: string = 'Home'
 }
 </script>
