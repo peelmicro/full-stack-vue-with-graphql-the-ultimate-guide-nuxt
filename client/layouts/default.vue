@@ -66,6 +66,14 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
+
+    <v-content>
+      <v-container class="mt-4">
+        <transition name="fade">
+          <nuxt />
+        </transition>
+      </v-container>
+    </v-content>
   </v-app>
 </template>
 
@@ -99,3 +107,20 @@ export default {
   }
 }
 </script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.25s;
+}
+
+.fade-enter-active {
+  transition-delay: 0.25s;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+</style>
