@@ -14,9 +14,14 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@nuxtjs/vuetify": "0.5.5",
+    "@nuxtjs/apollo": "^4.0.0-rc7",
     "@nuxtjs/pwa": "^2.6.0",
-    "nuxt": "^2.0.0"
+    "@nuxtjs/vuetify": "0.5.5",
+    "@vue/cli-shared-utils": "^3.8.0",
+    "graphql-tag": "^2.10.1",
+    "nuxt": "^2.0.0",
+    "nuxt-i18n": "^5.12.7",
+    "vuetify-loader": "^1.2.2"
   },
   "devDependencies": {
     "stylus": "^0.54.5",
@@ -36,7 +41,6 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "prettier": "^1.16.4",
-    "@vue/test-utils": "^1.0.0-beta.27",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^24.1.0",
     "jest": "^24.1.0",

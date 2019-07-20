@@ -4,7 +4,7 @@
     <v-navigation-drawer v-model="sideNav" fixed app temporary>
       <v-toolbar color="accent" dark flat>
         <v-toolbar-side-icon @click="toggleSideNav"></v-toolbar-side-icon>
-        <nuxt-link to="/" tag="span" style="cursor: pointer">
+        <nuxt-link :to="localePath('index')" tag="span" style="cursor: pointer">
           <h1 class="title pl-3">VueShare</h1>
         </nuxt-link>
       </v-toolbar>
@@ -16,7 +16,7 @@
         <v-list-tile
           v-for="(item, i) in sideNavItems"
           :key="i"
-          :to="item.link"
+          :to="localePath(item.link)"
           ripple
         >
           <v-list-tile-action>
@@ -34,7 +34,7 @@
       <!-- App Title -->
       <v-toolbar-side-icon @click="toggleSideNav"></v-toolbar-side-icon>
       <v-toolbar-title class="hidden-xs-only">
-        <nuxt-link to="/" tag="span" style="cursor: pointer">
+        <nuxt-link :to="localePath('index')" tag="span" style="cursor: pointer">
           VueShare
         </nuxt-link>
       </v-toolbar-title>
@@ -45,10 +45,10 @@
       <v-text-field
         flex
         prepend-icon="search"
-        placeholder="Search posts"
         color="accent"
         single-line
         hide-details
+        :placeholder="$t('searchposts')"
       ></v-text-field>
 
       <v-spacer></v-spacer>
@@ -58,13 +58,25 @@
         <v-btn
           v-for="(item, i) in horizontalNavItems"
           :key="i"
-          :to="item.link"
+          :to="localePath(item.link)"
           flat
         >
           <v-icon class="hidden-sm-only" left>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>
       </v-toolbar-items>
+      <v-toolbar-title class="hidden-xs-only">
+        <nuxt-link
+          v-for="(locale, i) in showLocales"
+          :key="i"
+          tag="span"
+          style="cursor: pointer"
+          class="lang-switcher"
+          :to="switchLocalePath(locale.code)"
+        >
+          {{ locale.name }}
+        </nuxt-link>
+      </v-toolbar-title>
     </v-toolbar>
 
     <v-content>
@@ -79,6 +91,9 @@
 
 <script>
 export default {
+  head() {
+    return this.$nuxtI18nSeo()
+  },
   data() {
     return {
       sideNav: false
@@ -87,17 +102,22 @@ export default {
   computed: {
     horizontalNavItems() {
       return [
-        { icon: 'chat', title: 'Posts', link: '/posts' },
-        { icon: 'lock_open', title: 'Sign In', link: '/signin' },
-        { icon: 'create', title: 'Sign Up', link: '/signup' }
+        { icon: 'chat', title: this.$i18n.t('posts'), link: 'posts' },
+        { icon: 'lock_open', title: this.$i18n.t('signin'), link: 'signin' },
+        { icon: 'create', title: this.$i18n.t('signup'), link: 'signup' }
       ]
     },
     sideNavItems() {
       return [
-        { icon: 'chat', title: 'Posts', link: '/posts' },
-        { icon: 'lock_open', title: 'Sign In', link: '/signin' },
-        { icon: 'create', title: 'Sign Up', link: '/signup' }
+        { icon: 'chat', title: this.$i18n.t('posts'), link: 'posts' },
+        { icon: 'lock_open', title: this.$i18n.t('signin'), link: 'signin' },
+        { icon: 'create', title: this.$i18n.t('signup'), link: 'signup' }
       ]
+    },
+    showLocales() {
+      return this.$i18n.locales.filter(
+        locale => locale.code !== this.$i18n.locale
+      )
     }
   },
   methods: {

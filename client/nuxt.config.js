@@ -1,3 +1,5 @@
+import es from './lang/es-ES.js'
+import en from './lang/en-US.js'
 // import colors from 'vuetify/es5/util/colors'
 
 export default {
@@ -41,7 +43,46 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/vuetify', '@nuxtjs/pwa', '@nuxtjs/eslint-module'],
+  modules: [
+    [
+      'nuxt-i18n',
+      {
+        seo: false,
+        locales: [
+          {
+            name: 'ESP',
+            code: 'es',
+            iso: 'es-ES'
+          },
+          {
+            name: 'ENG',
+            code: 'en',
+            iso: 'en-US'
+          }
+        ],
+        strategy: 'prefix_and_default',
+        langDir: 'lang/',
+        defaultLocale: 'es',
+        vueI18n: {
+          fallbackLocale: 'es',
+          messages: { es, en }
+        }
+      }
+    ],
+    '@nuxtjs/vuetify',
+    '@nuxtjs/pwa',
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/apollo'
+  ],
+  apollo: {
+    errorHandler: '~/apollo/customErrorHandler.js',
+    clientConfigs: {
+      default: {
+        httpEndpoint:
+          process.env.HTTP_ENDPOINT || 'http://localhost:4000/graphql'
+      }
+    }
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
