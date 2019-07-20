@@ -21,7 +21,8 @@
     "graphql-tag": "^2.10.1",
     "nuxt": "^2.0.0",
     "nuxt-i18n": "^5.12.7",
-    "vuetify-loader": "^1.2.2"
+    "vuetify-loader": "^1.2.2",
+    "lodash": ">=4.17.13"
   },
   "devDependencies": {
     "stylus": "^0.54.5",
