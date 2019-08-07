@@ -1,0 +1,11 @@
+query getCurrentUser {
+  getCurrentUser {
+    _id
+    username
+    email
+    password
+    avatar
+    joinDate
+    favorites
+  }
+}

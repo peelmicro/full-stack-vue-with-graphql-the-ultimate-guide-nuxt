@@ -26,6 +26,14 @@
             {{ item.title }}
           </v-list-tile-content>
         </v-list-tile>
+
+        <!-- Signout Button -->
+        <v-list-tile v-if="user" @click="handleSignoutUser">
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>{{ $t('signout') }}</v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
 
@@ -65,6 +73,22 @@
           {{ item.title }}
         </v-btn>
       </v-toolbar-items>
+
+      <!-- Profile Button -->
+      <v-btn v-if="user" flat to="profile">
+        <v-icon class="hidden-sm-only" left>account_box</v-icon>
+        <v-badge right color="blue darken-2">
+          <!-- <span slot="badge"></span> -->
+          {{ $t('profile') }}
+        </v-badge>
+      </v-btn>
+
+      <!-- Signout Button -->
+      <v-btn v-if="user" flat @click="handleSignoutUser">
+        <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>
+        {{ $t('signout') }}
+      </v-btn>
+
       <v-toolbar-title class="hidden-xs-only">
         <nuxt-link
           v-for="(locale, i) in showLocales"
@@ -79,17 +103,20 @@
       </v-toolbar-title>
     </v-toolbar>
 
-    <v-content>
+    <!-- App Content -->
+    <main>
       <v-container class="mt-4">
         <transition name="fade">
           <nuxt />
         </transition>
       </v-container>
-    </v-content>
+    </main>
   </v-app>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   head() {
     return this.$nuxtI18nSeo()
@@ -100,19 +127,36 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['user']),
     horizontalNavItems() {
-      return [
+      let items = [
         { icon: 'chat', title: this.$i18n.t('posts'), link: 'posts' },
         { icon: 'lock_open', title: this.$i18n.t('signin'), link: 'signin' },
         { icon: 'create', title: this.$i18n.t('signup'), link: 'signup' }
       ]
+      if (this.user) {
+        items = [{ icon: 'chat', title: this.$i18n.t('posts'), link: 'posts' }]
+      }
+      return items
     },
     sideNavItems() {
-      return [
+      let items = [
         { icon: 'chat', title: this.$i18n.t('posts'), link: 'posts' },
         { icon: 'lock_open', title: this.$i18n.t('signin'), link: 'signin' },
         { icon: 'create', title: this.$i18n.t('signup'), link: 'signup' }
       ]
+      if (this.user) {
+        items = [
+          { icon: 'chat', title: this.$i18n.t('posts'), link: 'posts' },
+          {
+            icon: 'stars',
+            title: this.$i18n.t('createPost'),
+            link: 'posts-add'
+          },
+          { icon: 'account_box', title: this.$i18n.t('posts'), link: 'profile' }
+        ]
+      }
+      return items
     },
     showLocales() {
       return this.$i18n.locales.filter(
@@ -121,6 +165,9 @@ export default {
     }
   },
   methods: {
+    handleSignoutUser() {
+      this.$store.dispatch('signoutUser')
+    },
     toggleSideNav() {
       this.sideNav = !this.sideNav
     }

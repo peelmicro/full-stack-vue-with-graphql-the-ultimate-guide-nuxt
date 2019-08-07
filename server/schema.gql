@@ -15,8 +15,8 @@ type Message {
 }
 
 type Mutation {
-  signupUserWithInput(input: UserInput!): User!
-  signupUser(password: String!, email: String!, username: String!): User!
+  signupUser(password: String!, email: String!, username: String!): Token!
+  signinUser(password: String!, username: String!): Token!
   addPostWithInput(input: PostInput!): Post!
   addPost(creatorId: String!, description: String!, categories: [String!]!, imageUrl: String!, title: String!): Post!
 }
@@ -42,8 +42,13 @@ input PostInput {
 }
 
 type Query {
+  getCurrentUser: User!
   getUsers: [User!]!
   getPosts: [Post!]!
+}
+
+type Token {
+  token: String!
 }
 
 type User {
@@ -53,11 +58,5 @@ type User {
   password: String!
   avatar: String
   joinDate: DateTime!
-  favourites: [ID!]
-}
-
-input UserInput {
-  username: String!
-  email: String!
-  password: String!
+  favorites: [ID!]
 }

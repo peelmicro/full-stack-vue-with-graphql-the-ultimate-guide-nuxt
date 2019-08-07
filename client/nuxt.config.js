@@ -76,6 +76,7 @@ export default {
   ],
   apollo: {
     errorHandler: '~/apollo/customErrorHandler.js',
+    authenticationType: '',
     clientConfigs: {
       default: {
         httpEndpoint:

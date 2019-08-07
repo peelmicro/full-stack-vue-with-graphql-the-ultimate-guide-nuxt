@@ -1,28 +1,43 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { UsersService } from '../users.service';
-import { UserInput } from './inputs/user.input';
-import { User } from './types/user.type';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
+import { UsersService } from '../users.service'
+import { User, Token } from './types/user.type'
+import { GraphqlAuthGuard } from '../../auth/graphql-auth.guard'
+import { CurrentUser } from '../../auth/current-user.decorator'
+import { AuthService } from '../../auth/auth.service'
+import { UseGuards } from '@nestjs/common'
 
 @Resolver()
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) { }
+
+  @Query(() => User)
+  @UseGuards(GraphqlAuthGuard)
+  async getCurrentUser(@CurrentUser() currentUser: User) {
+    return currentUser
+  }
 
   @Query(() => [User])
   async getUsers() {
-    return await this.usersService.getUsers();
+    return await this.usersService.getUsers()
   }
 
-  @Mutation(() => User)
-  async signupUserWithInput(@Args('input') input: UserInput) {
-    return await this.usersService.signupUser(input);
-  }
-  @Mutation(() => User)
+  @Mutation(() => Token)
   async signupUser(
     @Args('username') username: string,
     @Args('email') email: string,
     @Args('password') password: string,
   ) {
-    return await this.usersService.signupUser({ username, email, password });
+    return await this.authService.signUp({ username, email, password })
   }
 
+  @Mutation(() => Token)
+  async signinUser(
+    @Args('username') username: string,
+    @Args('password') password: string,
+  ) {
+    return await this.authService.signIn({ username,  password })
+  }
 }

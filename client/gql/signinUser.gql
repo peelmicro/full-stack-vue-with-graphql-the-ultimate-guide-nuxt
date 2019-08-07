@@ -1,0 +1,5 @@
+  mutation signinUser($username: String!, $password: String!) {
+    signinUser(username: $username, password: $password) {
+      token
+    }
+  }
