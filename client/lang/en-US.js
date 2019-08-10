@@ -7,8 +7,19 @@ export default {
   createPost: 'Create Post',
   profile: 'Profile',
   signout: 'Signout',
-  password: 'Password',
   username: 'Username',
+  password: 'Password',
+  confirmPassword: 'Confirm Password',
+  email: 'Email',
   dontHaveAnAccount: "Don't have an account?",
-  welcomeBack: 'Welcome Back!'
+  alreadyHaveAnAccount: 'Already have an account?',
+  welcomeBack: 'Welcome Back!',
+  getStartedHere: 'Get Started Here',
+  isRequired: '{name} is required',
+  mustBeValid: '{name} must be valid',
+  cannotBeMoreThanCharacters: `{name} cannot be more than {number} characters`,
+  mustBeAtLeast: `{name} must be at least {number} characters`,
+  passwordsMustMatch: 'Passwords must match',
+  yourAreNowSignedIn: `You are now signed in!`,
+  close: `Close`
 }

@@ -39,7 +39,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['@plugins/shared-components.js'],
   /*
    ** Nuxt.js modules
    */
@@ -72,11 +72,12 @@ export default {
     '@nuxtjs/vuetify',
     '@nuxtjs/pwa',
     '@nuxtjs/eslint-module',
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo',
+    `cookie-universal-nuxt`
   ],
   apollo: {
-    errorHandler: '~/apollo/customErrorHandler.js',
     authenticationType: '',
+    errorHandler: '~/apollo/customErrorHandler.js',
     clientConfigs: {
       default: {
         httpEndpoint:

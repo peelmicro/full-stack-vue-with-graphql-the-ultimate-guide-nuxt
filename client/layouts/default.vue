@@ -75,7 +75,7 @@
       </v-toolbar-items>
 
       <!-- Profile Button -->
-      <v-btn v-if="user" flat to="profile">
+      <v-btn v-if="user" flat :to="localePath('profile')">
         <v-icon class="hidden-sm-only" left>account_box</v-icon>
         <v-badge right color="blue darken-2">
           <!-- <span slot="badge"></span> -->
@@ -109,6 +109,35 @@
         <transition name="fade">
           <nuxt />
         </transition>
+
+        <!-- Auth Snackbar -->
+        <v-snackbar
+          v-model="authSnackbar"
+          color="success"
+          :timeout="5000"
+          bottom
+          left
+        >
+          <v-icon class="mr-3">check_circle</v-icon>
+          <h3>{{ $t('yourAreNowSignedIn') }}</h3>
+          <v-btn dark flat @click="authSnackbar = false">{{
+            $t('close')
+          }}</v-btn>
+        </v-snackbar>
+
+        <!-- Auth Error Snackbar -->
+        <v-snackbar
+          v-if="authError"
+          v-model="authErrorSnackbar"
+          color="info"
+          :timeout="5000"
+          bottom
+          left
+        >
+          <v-icon class="mr-3">cancel</v-icon>
+          <h3>{{ authError.message }}</h3>
+          <v-btn dark flat :to="localePath('signin')">{{ $t('close') }}</v-btn>
+        </v-snackbar>
       </v-container>
     </main>
   </v-app>
@@ -123,11 +152,13 @@ export default {
   },
   data() {
     return {
-      sideNav: false
+      sideNav: false,
+      authSnackbar: false,
+      authErrorSnackbar: false
     }
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters(['authError', 'user']),
     horizontalNavItems() {
       let items = [
         { icon: 'chat', title: this.$i18n.t('posts'), link: 'posts' },
@@ -153,7 +184,11 @@ export default {
             title: this.$i18n.t('createPost'),
             link: 'posts-add'
           },
-          { icon: 'account_box', title: this.$i18n.t('posts'), link: 'profile' }
+          {
+            icon: 'account_box',
+            title: this.$i18n.t('profile'),
+            link: 'profile'
+          }
         ]
       }
       return items
@@ -162,6 +197,20 @@ export default {
       return this.$i18n.locales.filter(
         locale => locale.code !== this.$i18n.locale
       )
+    }
+  },
+  watch: {
+    user(newValue, oldValue) {
+      // if we had no value for user before, show snackbar
+      if (oldValue === null) {
+        this.authSnackbar = true
+      }
+    },
+    authError(value) {
+      // if auth error is not null, show auth error snackbar
+      if (value !== null) {
+        this.authErrorSnackbar = true
+      }
     }
   },
   methods: {

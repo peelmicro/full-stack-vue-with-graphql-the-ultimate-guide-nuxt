@@ -1,11 +1,15 @@
 import { getPosts } from '~/gql/getPosts.gql'
 import { getCurrentUser } from '~/gql/getCurrentUser.gql'
 import { signinUser } from '~/gql/signinUser.gql'
+import { signupUser } from '~/gql/signupUser.gql'
+import utils from '~/helpers/utils'
 
 export const state = () => ({
   posts: [],
   user: null,
-  loading: false
+  loading: false,
+  error: null,
+  authError: null
 })
 export const mutations = {
   setPosts: (state, payload) => {
@@ -17,7 +21,15 @@ export const mutations = {
   setLoading: (state, payload) => {
     state.loading = payload
   },
-  clearUser: state => (state.user = null)
+  clearUser: state => (state.user = null),
+  setError: (state, payload) => {
+    state.error = payload
+  },
+  clearError: state => (state.error = null),
+  setAuthError: (state, payload) => {
+    state.authError = payload
+  },
+  clearAuthError: state => (state.authError = null)
 }
 export const actions = {
   async nuxtServerInit({ dispatch }) {
@@ -25,6 +37,7 @@ export const actions = {
     await dispatch('getPosts')
   },
   async getPosts({ commit }) {
+    commit('clearError')
     commit('setLoading', true)
     try {
       const result = await this.app.apolloProvider.defaultClient.query({
@@ -32,13 +45,20 @@ export const actions = {
       })
       commit('setPosts', result.data.getPosts)
     } catch (error) {
-      console.log(error)
+      const currentError = utils.getCurrentGraphQLError(error)
+      commit('setError', currentError)
+      console.error(utils.getFirstGraphQLError(error))
     }
     commit('setLoading', false)
   },
-  async getCurrentUser({ commit }) {
-    if (!this.app.$apolloHelpers.getToken()) {
-      commit('clearUser')
+  async logOut({ commit }) {
+    this.app.$cookies.remove('apollo-token')
+    await this.app.$apolloHelpers.onLogout()
+    commit('clearUser')
+  },
+  async getCurrentUser({ commit, dispatch }) {
+    if (!utils.isJwtTokenValid(this.app.$apolloHelpers.getToken())) {
+      await dispatch('logOut')
       return
     }
     commit('setLoading', true)
@@ -48,12 +68,22 @@ export const actions = {
       })
       // Add user data to state
       commit('setUser', result.data.getCurrentUser)
+      commit('clearError')
+      commit('clearAuthError')
     } catch (error) {
-      console.error(error)
+      const currentError = utils.getCurrentGraphQLError(error)
+      if (currentError === 'Unauthorized') {
+        commit('setAuthError', currentError)
+        await dispatch('logOut')
+      } else {
+        commit('setError', currentError)
+      }
+      console.error(utils.getFirstGraphQLError(error))
     }
     commit('setLoading', false)
   },
   async signinUser({ commit, dispatch }, payload) {
+    commit('clearError')
     commit('setLoading', true)
     try {
       const result = await this.app.apolloProvider.defaultClient.mutate({
@@ -62,16 +92,32 @@ export const actions = {
       })
       await this.app.$apolloHelpers.onLogin(result.data.signinUser.token)
       await dispatch('getCurrentUser')
-      commit('setLoading', false)
     } catch (error) {
-      console.error(error)
-      commit('setLoading', false)
+      const currentError = utils.getCurrentGraphQLError(error)
+      commit('setError', currentError)
+      console.error(utils.getFirstGraphQLError(error))
     }
+    commit('setLoading', false)
   },
-  async signoutUser({ commit }) {
-    // clear user in state
-    commit('clearUser')
-    await this.app.$apolloHelpers.onLogout()
+  async signupUser({ commit, dispatch }, payload) {
+    commit('clearError')
+    commit('setLoading', true)
+    try {
+      const result = await this.app.apolloProvider.defaultClient.mutate({
+        mutation: signupUser,
+        variables: payload
+      })
+      await this.app.$apolloHelpers.onLogin(result.data.signupUser.token)
+      await dispatch('getCurrentUser')
+    } catch (error) {
+      const currentError = utils.getCurrentGraphQLError(error)
+      commit('setError', currentError)
+      console.error(utils.getFirstGraphQLError(error))
+    }
+    commit('setLoading', false)
+  },
+  async signoutUser({ dispatch }) {
+    await dispatch('logOut')
     // redirect home - kick users out of private pages (i.e. profile)
     this.app.router.push(this.app.localePath('index'))
   }
@@ -79,5 +125,7 @@ export const actions = {
 export const getters = {
   posts: state => state.posts,
   user: state => state.user,
-  loading: state => state.loading
+  loading: state => state.loading,
+  error: state => state.error,
+  authError: state => state.authError
 }

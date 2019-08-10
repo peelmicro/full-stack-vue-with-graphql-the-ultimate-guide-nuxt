@@ -9,6 +9,17 @@ export default {
   signout: 'Cerrar sesión',
   username: 'Usuario',
   password: 'Contraseña',
+  confirmPassword: 'Confirmar Contraseña',
+  email: 'Email',
   dontHaveAnAccount: '¿No tiene una cuenta?',
-  welcomeBack: '¡Bienvenido de nuevo!'
+  alreadyHaveAnAccount: '¿Ya tiene una cuenta?',
+  welcomeBack: '¡Bienvenido de nuevo!',
+  getStartedHere: 'Comience aquí',
+  isRequired: '{name} es requerido',
+  mustBeValid: '{name} debe de ser válido',
+  cannotBeMoreThanCharacters: `{name} no puede contener más de {number} caracteres`,
+  mustBeAtLeast: `{name} debe contener al menos {number} caracteres`,
+  passwordsMustMatch: 'Las Contraseñas deben coincidir',
+  yourAreNowSignedIn: `¡Ahora está registrado!`,
+  close: `Cerrar`
 }
