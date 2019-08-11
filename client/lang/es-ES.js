@@ -17,9 +17,32 @@ export default {
   getStartedHere: 'Comience aquí',
   isRequired: '{name} es requerido',
   mustBeValid: '{name} debe de ser válido',
-  cannotBeMoreThanCharacters: `{name} no puede contener más de {number} caracteres`,
-  mustBeAtLeast: `{name} debe contener al menos {number} caracteres`,
+  cannotBeMoreThanCharacters:
+    '{name} no puede contener más de {number} caracteres',
+  mustBeAtLeast: '{name} debe contener al menos {number} caracteres',
   passwordsMustMatch: 'Las Contraseñas deben coincidir',
-  yourAreNowSignedIn: `¡Ahora está registrado!`,
-  close: `Cerrar`
+  yourAreNowSignedIn: '¡Ahora está registrado!',
+  close: 'Cerrar',
+  sessionExpiredSignInAgain:
+    'Su sesión ha caducado. Por favor, inicie la sesión otra vez.',
+  addPost: 'Añadir Entrada',
+  postTitle: 'Título de la entrada',
+  imageUrl: 'URL de la imagen',
+  category: 'Categoría | Categorías',
+  categoryItems: {
+    art: 'Arte',
+    education: 'Educación',
+    food: 'Comida',
+    furniture: 'Muebles',
+    travel: 'Viajes',
+    photography: 'Fotografía',
+    technology: 'Tecnología'
+  },
+  description: 'Descripción',
+  submit: 'Enviar',
+  atLeastOne: 'Por lo menos una',
+  likes: 'me gusta',
+  comments: 'comentarios',
+  added: 'Creado',
+  fetchMore: 'Obtener más'
 }

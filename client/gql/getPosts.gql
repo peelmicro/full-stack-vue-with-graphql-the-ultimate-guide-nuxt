@@ -3,7 +3,5 @@ query getPosts {
     _id
     title
     imageUrl
-    description
-    likes
   }
-}
+} 

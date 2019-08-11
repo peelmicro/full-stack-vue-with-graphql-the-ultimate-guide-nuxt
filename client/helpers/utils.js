@@ -24,14 +24,17 @@ const utils = {
   },
   getCurrentGraphQLError(graphQLError) {
     const error = this.getFirstGraphQLError(graphQLError)
+    if (!error) {
+      return graphQLError
+    }
     const currentError =
       error.message && (!error.message.message || !error.message.error)
         ? error.message
         : error.error
         ? error.error
-        : error.message.message
+        : error.message && error.message.message
         ? error.message.message
-        : error.message.error
+        : error.message && error.message.error
         ? error.message.error
         : error
     return currentError

@@ -21,5 +21,5 @@ export class User {
   @Field()
   readonly joinDate: Date
   @Field(() => [ID], { nullable: true })
-  readonly favorites: [string]
+  readonly favorites: string[]
 }

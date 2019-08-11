@@ -20,7 +20,7 @@ class Message {
 export class Post extends Typegoose {
   @IsString()
   @prop({ required: true })
-  title: string;
+  title: string; 
 
   @IsString()
   @prop({ required: true })
@@ -28,7 +28,7 @@ export class Post extends Typegoose {
 
   @IsString()
   @prop({ required: true })
-  categories: [string];
+  categories: string[];
 
   @IsString()
   @prop({ required: true })

@@ -1,4 +1,4 @@
-import { InputType, Field } from 'type-graphql';
+import { InputType, Field, ID } from 'type-graphql';
 
 @InputType()
 export class PostInput {
@@ -6,11 +6,11 @@ export class PostInput {
   readonly title: string;
   @Field()
   readonly imageUrl: string;
-  @Field(() => [String])
-  readonly categories: [string];
+  @Field(() => [String], { nullable: "items" })
+  readonly categories: string[];
   @Field()
   readonly description: string;
-  @Field()
+  @Field(() => ID)
   readonly creatorId: string;
 
 }

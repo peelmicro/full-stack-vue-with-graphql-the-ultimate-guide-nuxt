@@ -9,6 +9,7 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type Message {
+  _id: ID!
   messageBody: String!
   messageDate: DateTime!
   messageUser: String!
@@ -18,17 +19,17 @@ type Mutation {
   signupUser(password: String!, email: String!, username: String!): Token!
   signinUser(password: String!, username: String!): Token!
   addPostWithInput(input: PostInput!): Post!
-  addPost(creatorId: String!, description: String!, categories: [String!]!, imageUrl: String!, title: String!): Post!
+  addPost(creatorId: ID!, description: String!, categories: [String]!, imageUrl: String!, title: String!): Post!
 }
 
 type Post {
   _id: ID!
   title: String!
   imageUrl: String!
-  categories: [String!]!
+  categories: [String]!
   description: String!
   createdDate: DateTime!
-  likes: Int!
+  likes: Int
   createdBy: User!
   messages: [Message!]
 }
@@ -36,15 +37,21 @@ type Post {
 input PostInput {
   title: String!
   imageUrl: String!
-  categories: [String!]!
+  categories: [String]!
   description: String!
-  creatorId: String!
+  creatorId: ID!
+}
+
+type PostPage {
+  posts: [Post!]!
+  hasMore: Boolean!
 }
 
 type Query {
   getCurrentUser: User!
   getUsers: [User!]!
   getPosts: [Post!]!
+  infiniteScrollPosts(pageSize: Int!, pageNum: Int!): PostPage!
 }
 
 type Token {

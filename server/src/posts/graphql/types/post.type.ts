@@ -3,6 +3,8 @@ import { User } from '../../../users/graphql/types/user.type'
 
 @ObjectType()
 class Message {
+  @Field(() => ID)
+  readonly _id: string  
   @Field()
   readonly messageBody: string;
   @Field()
@@ -19,13 +21,13 @@ export class Post {
   readonly title: string;
   @Field()
   readonly imageUrl: string;
-  @Field(() => [String])
-  readonly categories: [string];
+  @Field(() => [String], { nullable: "items" })
+  readonly categories: string[];
   @Field()
   readonly description: string;
   @Field()
   readonly createdDate: Date
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   likes: number;
   @Field(() => User)
   readonly createdBy: User
