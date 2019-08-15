@@ -44,5 +44,11 @@ export default {
   likes: 'me gusta',
   comments: 'comentarios',
   added: 'Creado',
-  fetchMore: 'Obtener más'
+  fetchMore: 'Obtener más',
+  message: 'Mensaje | Mensajes',
+  clickToEnlargeImage: 'Haga clic para ampliar la imagen',
+  addMessage: 'Añadir Mensaje',
+  pageNotFound: '404 No encontrado',
+  otherError: 'Oucrrió un error',
+  homePage: 'Página inicial'
 }

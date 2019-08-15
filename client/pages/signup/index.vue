@@ -123,7 +123,7 @@ export default {
           !!username ||
           this.$i18n.t('isRequired', { name: this.$i18n.t('username') }),
         username =>
-          username.length < 10 ||
+          username.length <= 10 ||
           this.$i18n.t('cannotBeMoreThanCharacters', {
             name: this.$i18n.t('username'),
             number: 10

@@ -1,9 +1,9 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { Int, ID } from 'type-graphql';
-import { PostsService } from '../posts.service';
+import { PostsService } from './posts.service';
 import { PostInput } from './inputs/post.input';
 import { PostPage } from './types/post-page.type';
-import { Post } from './types/post.type';
+import { Post, Message } from './post.model';
 
 @Resolver()
 export class PostsResolver {
@@ -12,6 +12,11 @@ export class PostsResolver {
   @Query(() => [Post])
   async getPosts() {
     return await this.postsService.getPosts();
+  }
+
+  @Query(() => Post)
+  async getPost(@Args({ name: 'postId', type: () => ID}) postId: string) {
+    return await this.postsService.getPost(postId);
   }
 
   @Query(() => PostPage)
@@ -28,6 +33,7 @@ export class PostsResolver {
     const { title, imageUrl, categories, description } = input
     return await this.postsService.addPost({ title, imageUrl, categories, description, createdBy });
   }
+
   @Mutation(() => Post)
   async addPost(
     @Args('title') title: string,
@@ -38,6 +44,15 @@ export class PostsResolver {
   ) {
     const createdBy = creatorId;
     return await this.postsService.addPost({ title, imageUrl, categories, description, createdBy });
+  }
+
+  @Mutation(() => Message)
+  async addPostMessage(
+    @Args('messageBody') messageBody: string,
+    @Args({ name: 'userId', type: () => ID}) userId: string,
+    @Args({ name: 'postId', type: () => ID}) postId: string,
+  ) {
+    return await this.postsService.addPostMessage({ messageBody, userId, postId });
   }
 
 }

@@ -9,7 +9,12 @@
         sm6
       >
         <v-card hover>
-          <v-img :src="post.imageUrl" height="30vh" lazy></v-img>
+          <v-img
+            :src="post.imageUrl"
+            height="30vh"
+            lazy
+            @click.native="goToPost(post._id)"
+          ></v-img>
 
           <v-card-actions>
             <v-card-title primary>
@@ -124,6 +129,9 @@ export default {
           }
         }
       })
+    },
+    goToPost(postId) {
+      this.$router.push(`${this.localePath('posts')}/${postId}`)
     }
   }
 }

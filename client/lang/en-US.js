@@ -42,5 +42,11 @@ export default {
   likes: 'likes',
   comments: 'comments',
   added: 'Added',
-  fetchMore: 'Fetch More'
+  fetchMore: 'Fetch More',
+  message: 'Message | Messages',
+  clickToEnlargeImage: 'Click to enlarge image',
+  addMessage: 'Add Message',
+  pageNotFound: '404 Not Found',
+  otherError: 'An error occurred',
+  homePage: 'Home Page'
 }

@@ -12,7 +12,7 @@ type Message {
   _id: ID!
   messageBody: String!
   messageDate: DateTime!
-  messageUser: String!
+  messageUser: User!
 }
 
 type Mutation {
@@ -20,6 +20,7 @@ type Mutation {
   signinUser(password: String!, username: String!): Token!
   addPostWithInput(input: PostInput!): Post!
   addPost(creatorId: ID!, description: String!, categories: [String]!, imageUrl: String!, title: String!): Post!
+  addPostMessage(postId: ID!, userId: ID!, messageBody: String!): Message!
 }
 
 type Post {
@@ -31,7 +32,7 @@ type Post {
   createdDate: DateTime!
   likes: Int
   createdBy: User!
-  messages: [Message!]
+  messages: [Message]
 }
 
 input PostInput {
@@ -43,7 +44,7 @@ input PostInput {
 }
 
 type PostPage {
-  posts: [Post!]!
+  posts: [Post]!
   hasMore: Boolean!
 }
 
@@ -51,6 +52,7 @@ type Query {
   getCurrentUser: User!
   getUsers: [User!]!
   getPosts: [Post!]!
+  getPost(postId: ID!): Post!
   infiniteScrollPosts(pageSize: Int!, pageNum: Int!): PostPage!
 }
 
@@ -65,5 +67,5 @@ type User {
   password: String!
   avatar: String
   joinDate: DateTime!
-  favorites: [ID!]
+  favorites: [ID]
 }

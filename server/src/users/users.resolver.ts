@@ -1,9 +1,9 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
-import { UsersService } from '../users.service'
-import { User, Token } from './types/user.type'
-import { GraphqlAuthGuard } from '../../auth/graphql-auth.guard'
-import { CurrentUser } from '../../auth/current-user.decorator'
-import { AuthService } from '../../auth/auth.service'
+import { UsersService } from './users.service'
+import { User, Token } from './user.model'
+import { GraphqlAuthGuard } from '../auth/graphql-auth.guard'
+import { CurrentUser } from '../auth/current-user.decorator'
+import { AuthService } from '../auth/auth.service'
 import { UseGuards } from '@nestjs/common'
 
 @Resolver()

@@ -10,6 +10,7 @@ export const databaseProviders = [
       uri: config.get('MONGO_URI'),
       useNewUrlParser: true,
       useCreateIndex: true,
+      useFindAndModify : false,
     }),
   }),
 ]

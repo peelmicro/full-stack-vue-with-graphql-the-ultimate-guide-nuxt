@@ -25,6 +25,7 @@
           v-for="post in posts"
           :key="post._id"
           :src="post.imageUrl"
+          @click.native="goToPost(post._id)"
         >
           <h1 id="carousel__title">{{ post.title }}</h1>
         </v-carousel-item>
@@ -40,6 +41,11 @@ export default {
   name: 'Home',
   computed: {
     ...mapGetters(['loading', 'posts'])
+  },
+  methods: {
+    goToPost(postId) {
+      this.$router.push(`${this.localePath('posts')}/${postId}`)
+    }
   }
 }
 </script>

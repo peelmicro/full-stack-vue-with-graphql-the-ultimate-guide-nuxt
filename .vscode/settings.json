@@ -15,5 +15,14 @@
   ],
   "eslint.autoFixOnSave": true,
   "editor.formatOnSave": false,
-  "vetur.validation.template": false
+  "vetur.validation.template": false,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "server\\src\\posts/graphql": true
+  },
+  "explorerExclude.backup": null
 }

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common'
 import { TypegooseModule } from 'nestjs-typegoose'
-import { User } from './model/user.model'
+import { User } from './user.model'
 import { UsersService } from './users.service'
-import { UsersResolver } from "./graphql/users.resolver"
+import { UsersResolver } from "./users.resolver"
 import { ConfigService } from '../config/config.service'
 import { AuthModule } from '../auth/auth.module'
 

@@ -97,7 +97,7 @@ export default {
           this.$i18n.t('isRequired', { name: this.$i18n.t('username') }),
         // Make sure username is less than 10 characters
         username =>
-          username.length < 10 ||
+          username.length <= 10 ||
           this.$i18n.t('cannotBeMoreThanCharacters', {
             name: this.$i18n.t('username'),
             number: 10

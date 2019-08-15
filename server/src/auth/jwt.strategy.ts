@@ -1,9 +1,9 @@
 import { PassportStrategy } from '@nestjs/passport'
 import { Strategy, ExtractJwt } from 'passport-jwt'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtPayload } from './jwt-payload.interface'
+// import { JwtPayload } from './jwt-payload.interface'
 import { InjectModel } from 'nestjs-typegoose'
-import { User } from '../users/model/user.model'
+import { User } from '../users/user.model'
 import { ModelType } from 'typegoose'
 import { ConfigService } from '../config/config.service'
 

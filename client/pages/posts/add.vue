@@ -138,7 +138,7 @@ export default {
           !!title ||
           this.$i18n.t('isRequired', { name: this.$i18n.t('postTitle') }),
         title =>
-          title.length < 20 ||
+          title.length <= 20 ||
           this.$i18n.t('cannotBeMoreThanCharacters', {
             name: this.$i18n.t('postTitle'),
             number: 20
@@ -164,7 +164,7 @@ export default {
           !!desc ||
           this.$i18n.t('isRequired', { name: this.$i18n.t('description') }),
         desc =>
-          desc.length < 200 ||
+          desc.length <= 200 ||
           this.$i18n.t('cannotBeMoreThanCharacters', {
             name: this.$i18n.t('description'),
             number: 200

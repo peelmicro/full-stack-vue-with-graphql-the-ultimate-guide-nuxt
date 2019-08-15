@@ -6,7 +6,7 @@ import { JwtStrategy } from './jwt.strategy'
 import { ConfigModule } from '../config/config.module';
 import { ConfigService } from '../config/config.service';
 import { TypegooseModule } from 'nestjs-typegoose'
-import { User } from '../users/model/user.model';
+import { User } from '../users/user.model';
 
 @Module({
   imports: [

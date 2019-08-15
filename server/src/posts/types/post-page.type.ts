@@ -1,9 +1,9 @@
 import { Field, ObjectType } from 'type-graphql'
-import { Post } from './post.type'
+import { Post } from '../post.model'
 
 @ObjectType()
 export class PostPage {
-  @Field(() => [Post])
+  @Field(() => [Post], { nullable: "items" })
   readonly posts: [Post]
 
   @Field(() => Boolean)
