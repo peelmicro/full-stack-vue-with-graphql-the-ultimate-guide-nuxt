@@ -3,6 +3,7 @@ import { Int, ID } from 'type-graphql';
 import { PostsService } from './posts.service';
 import { PostInput } from './inputs/post.input';
 import { PostPage } from './types/post-page.type';
+import { LikesFaves } from './types/likes-faves.type';
 import { Post, Message } from './post.model';
 
 @Resolver()
@@ -53,6 +54,22 @@ export class PostsResolver {
     @Args({ name: 'postId', type: () => ID}) postId: string,
   ) {
     return await this.postsService.addPostMessage({ messageBody, userId, postId });
+  }
+
+  @Mutation(() => LikesFaves)
+  async likePost(
+    @Args({ name: 'postId', type: () => ID}) postId: string,
+    @Args('username') username: string
+  ) {
+    return await this.postsService.likePost( postId, username );
+  }
+
+  @Mutation(() => LikesFaves)
+  async unlikePost(
+    @Args({ name: 'postId', type: () => ID}) postId: string,
+    @Args('username') username: string
+  ) {
+    return await this.postsService.unlikePost( postId, username );
   }
 
 }

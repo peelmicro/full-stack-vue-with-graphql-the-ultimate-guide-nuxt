@@ -8,6 +8,11 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
+type LikesFaves {
+  likes: Int!
+  favorites: [Post]!
+}
+
 type Message {
   _id: ID!
   messageBody: String!
@@ -21,6 +26,8 @@ type Mutation {
   addPostWithInput(input: PostInput!): Post!
   addPost(creatorId: ID!, description: String!, categories: [String]!, imageUrl: String!, title: String!): Post!
   addPostMessage(postId: ID!, userId: ID!, messageBody: String!): Message!
+  likePost(username: String!, postId: ID!): LikesFaves!
+  unlikePost(username: String!, postId: ID!): LikesFaves!
 }
 
 type Post {
@@ -67,5 +74,5 @@ type User {
   password: String!
   avatar: String
   joinDate: DateTime!
-  favorites: [ID]
+  favorites: [Post]
 }

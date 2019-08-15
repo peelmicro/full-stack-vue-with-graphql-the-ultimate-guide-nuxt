@@ -1,0 +1,10 @@
+mutation unlikePost($postId: ID!, $username: String!) {
+  unlikePost(postId: $postId, username: $username) {
+    likes
+    favorites {
+      _id
+      title
+      imageUrl
+    }
+  }
+}

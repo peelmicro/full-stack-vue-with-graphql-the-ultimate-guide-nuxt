@@ -153,6 +153,7 @@ export const actions = {
 export const getters = {
   posts: state => state.posts,
   user: state => state.user,
+  userFavorites: state => state.user && state.user.favorites,
   loading: state => state.loading,
   error: state => state.error,
   authError: state => state.authError

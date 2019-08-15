@@ -23,7 +23,7 @@ import { User } from '../users/user.model';
     }),
     TypegooseModule.forFeature([User]),    
 
-  ],
+  ], 
   providers: [
     JwtStrategy,
     AuthService,

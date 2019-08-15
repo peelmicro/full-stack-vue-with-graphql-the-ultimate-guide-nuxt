@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: any): Promise<User | null> {
     const { username } = payload
     const user = await this.userModel.findOne({
-      username: username
+      username
     }).populate({
       path: "favorites",
       model: "Post"

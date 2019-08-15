@@ -6,6 +6,10 @@ query getCurrentUser {
     password
     avatar
     joinDate
-    favorites
+    favorites {
+      _id
+      title
+      imageUrl
+    }
   }
 }
