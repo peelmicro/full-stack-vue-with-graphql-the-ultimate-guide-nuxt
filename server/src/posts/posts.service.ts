@@ -34,6 +34,24 @@ export class PostsService {
     return post;
   }
 
+  async searchPosts(searchTerm: string): Promise<Post[] | null> {
+    if (searchTerm) {
+      const searchResults = await this.postModel.find(
+        // Perform text search for search value of 'searchTerm'
+        { $text: { $search: searchTerm } },
+        // Assign 'searchTerm' a text score to provide best match
+        { score: { $meta: "textScore" } }
+      )
+        // Sort results according to that textScore (as well as by likes in descending order)
+        .sort({
+          score: { $meta: "textScore" },
+          likes: "desc"
+        })
+        .limit(5);
+      return searchResults;
+    }
+  }
+
   async infiniteScrollPosts(pageNum: number, pageSize: number): Promise<PostPage | null> {
     const skips = pageSize * (pageNum - 1)
     const posts = await this.postModel.find({})

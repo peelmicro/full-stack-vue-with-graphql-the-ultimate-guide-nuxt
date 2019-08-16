@@ -1,4 +1,4 @@
-import { prop, arrayProp, Typegoose, Ref } from 'typegoose';
+import { prop, arrayProp, Typegoose, Ref, index } from 'typegoose';
 import { IsDate, IsInt } from 'class-validator';
 import { Field, ObjectType, ID, Int } from 'type-graphql';
 import { User } from '../users/user.model'
@@ -22,6 +22,8 @@ export class Message extends Typegoose {
   messageUser: Ref<User>
 }
 
+// Create index to search on all fields of posts
+@index({'$**': 'text'})
 @ObjectType()
 export class Post extends Typegoose {
   @Field(() => ID)

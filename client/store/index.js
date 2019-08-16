@@ -1,4 +1,5 @@
 import { getPosts } from '~/gql/getPosts.gql'
+import { searchPosts } from '~/gql/searchPosts.gql'
 import { getCurrentUser } from '~/gql/getCurrentUser.gql'
 import { signinUser } from '~/gql/signinUser.gql'
 import { signupUser } from '~/gql/signupUser.gql'
@@ -7,6 +8,7 @@ import utils from '~/helpers/utils'
 
 export const state = () => ({
   posts: [],
+  searchResults: [],
   user: null,
   loading: false,
   error: null,
@@ -15,6 +17,11 @@ export const state = () => ({
 export const mutations = {
   setPosts: (state, payload) => {
     state.posts = payload
+  },
+  setSearchResults: (state, payload) => {
+    if (payload !== null && payload.length > 0) {
+      state.searchResults = payload
+    }
   },
   addPost: (state, payload) => {
     const posts = state.posts
@@ -35,7 +42,8 @@ export const mutations = {
   setAuthError: (state, payload) => {
     state.authError = payload
   },
-  clearAuthError: state => (state.authError = null)
+  clearAuthError: state => (state.authError = null),
+  clearSearchResults: state => (state.searchResults = [])
 }
 export const actions = {
   async nuxtServerInit({ dispatch }) {
@@ -56,6 +64,22 @@ export const actions = {
       console.error(utils.getFirstGraphQLError(error))
     }
     commit('setLoading', false)
+  },
+  async searchPosts({ commit }, payload) {
+    commit('clearError')
+    // commit('setLoading', true)
+    try {
+      const result = await this.app.apolloProvider.defaultClient.query({
+        query: searchPosts,
+        variables: payload
+      })
+      commit('setSearchResults', result.data.searchPosts)
+    } catch (error) {
+      const currentError = utils.getCurrentGraphQLError(error)
+      commit('setError', currentError)
+      console.error(utils.getFirstGraphQLError(error))
+    }
+    // commit('setLoading', false)
   },
   async addPost({ commit }, payload) {
     commit('clearError')
@@ -86,6 +110,8 @@ export const actions = {
   },
   async getCurrentUser({ commit, dispatch }) {
     if (!utils.isJwtTokenValid(this.app.$apolloHelpers.getToken())) {
+      console.log('Invalid Token', this.app.i18n.t('sessionExpiredSignInAgain'))
+      commit('setAuthError', this.app.i18n.t('sessionExpiredSignInAgain'))
       await dispatch('logOut')
       return
     }
@@ -101,6 +127,7 @@ export const actions = {
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       if (currentError === 'Unauthorized') {
+        console.log('Error', this.app.i18n.t('sessionExpiredSignInAgain'))
         commit('setAuthError', this.app.i18n.t('sessionExpiredSignInAgain'))
         await dispatch('logOut')
       } else {
@@ -152,6 +179,7 @@ export const actions = {
 }
 export const getters = {
   posts: state => state.posts,
+  searchResults: state => state.searchResults,
   user: state => state.user,
   userFavorites: state => state.user && state.user.favorites,
   loading: state => state.loading,

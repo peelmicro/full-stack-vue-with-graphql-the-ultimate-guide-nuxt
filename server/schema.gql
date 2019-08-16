@@ -60,6 +60,7 @@ type Query {
   getUsers: [User!]!
   getPosts: [Post!]!
   getPost(postId: ID!): Post!
+  searchPosts(searchTerm: String): [Post!]
   infiniteScrollPosts(pageSize: Int!, pageNum: Int!): PostPage!
 }
 

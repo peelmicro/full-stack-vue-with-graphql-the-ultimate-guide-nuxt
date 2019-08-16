@@ -1,0 +1,9 @@
+query searchPosts($searchTerm: String) {
+  searchPosts(searchTerm: $searchTerm) {
+    _id
+    title
+    description
+    imageUrl
+    likes
+  }
+}

@@ -16,14 +16,19 @@ export class PostsResolver {
   }
 
   @Query(() => Post)
-  async getPost(@Args({ name: 'postId', type: () => ID}) postId: string) {
+  async getPost(@Args({ name: 'postId', type: () => ID }) postId: string) {
     return await this.postsService.getPost(postId);
+  }
+
+  @Query(() => [Post], { nullable: true })
+  async searchPosts(@Args({ name: 'searchTerm', type: () => String, nullable: true }) searchTerm: string) {
+    return await this.postsService.searchPosts(searchTerm);
   }
 
   @Query(() => PostPage)
   async infiniteScrollPosts(
-    @Args({ name: 'pageNum', type: () => Int}) pageNum: number,
-    @Args({ name: 'pageSize', type: () => Int}) pageSize: number
+    @Args({ name: 'pageNum', type: () => Int }) pageNum: number,
+    @Args({ name: 'pageSize', type: () => Int }) pageSize: number
   ) {
     return await this.postsService.infiniteScrollPosts(pageNum, pageSize);
   }
@@ -41,7 +46,7 @@ export class PostsResolver {
     @Args('imageUrl') imageUrl: string,
     @Args({ name: 'categories', type: () => [String], nullable: "items" }) categories: string[],
     @Args('description') description: string,
-    @Args({ name: 'creatorId', type: () => ID}) creatorId: string,
+    @Args({ name: 'creatorId', type: () => ID }) creatorId: string,
   ) {
     const createdBy = creatorId;
     return await this.postsService.addPost({ title, imageUrl, categories, description, createdBy });
@@ -50,26 +55,26 @@ export class PostsResolver {
   @Mutation(() => Message)
   async addPostMessage(
     @Args('messageBody') messageBody: string,
-    @Args({ name: 'userId', type: () => ID}) userId: string,
-    @Args({ name: 'postId', type: () => ID}) postId: string,
+    @Args({ name: 'userId', type: () => ID }) userId: string,
+    @Args({ name: 'postId', type: () => ID }) postId: string,
   ) {
     return await this.postsService.addPostMessage({ messageBody, userId, postId });
   }
 
   @Mutation(() => LikesFaves)
   async likePost(
-    @Args({ name: 'postId', type: () => ID}) postId: string,
+    @Args({ name: 'postId', type: () => ID }) postId: string,
     @Args('username') username: string
   ) {
-    return await this.postsService.likePost( postId, username );
+    return await this.postsService.likePost(postId, username);
   }
 
   @Mutation(() => LikesFaves)
   async unlikePost(
-    @Args({ name: 'postId', type: () => ID}) postId: string,
+    @Args({ name: 'postId', type: () => ID }) postId: string,
     @Args('username') username: string
   ) {
-    return await this.postsService.unlikePost( postId, username );
+    return await this.postsService.unlikePost(postId, username);
   }
 
 }
