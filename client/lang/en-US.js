@@ -48,5 +48,17 @@ export default {
   addMessage: 'Add Message',
   pageNotFound: '404 Not Found',
   otherError: 'An error occurred',
-  homePage: 'Home Page'
+  homePage: 'Home Page',
+  sureDeleteThisPost: 'Are you sure you want to delete this post?',
+  favorites: 'Favorites',
+  postsAdded: 'Posts Added',
+  joined: 'Joined',
+  noFavoritesCurrently: 'You have no favorites currently.',
+  noPostCurrently: 'You have no posts currently.',
+  goAndAddSome: 'Go and add some!',
+  favorited: `Favorited`,
+  yourPosts: 'Your Posts',
+  updatePost: 'Update Post',
+  update: 'Update',
+  cancel: 'Cancel'
 }

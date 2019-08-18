@@ -50,5 +50,17 @@ export default {
   addMessage: 'Añadir Mensaje',
   pageNotFound: '404 No encontrado',
   otherError: 'Oucrrió un error',
-  homePage: 'Página inicial'
+  homePage: 'Página inicial',
+  sureDeleteThisPost: '¿Está seguro de que desea eliminar esta entrada?',
+  favorites: 'Favoritos',
+  postsAdded: 'Entradas Añadidas',
+  joined: 'Inscrito',
+  noFavoritesCurrentlyAddSome: 'No tiene favoritos actualmente.',
+  noPostCurrently: 'No tiene entradas actualmente.',
+  goAndAddSome: '¡Acceda y agregue alguno!',
+  favorited: `Favoritos`,
+  yourPosts: 'Sus Entradas',
+  updatePost: 'Actualizar Entrada',
+  update: 'Actualizar',
+  cancel: 'Cancelar'
 }

@@ -1,13 +1,17 @@
 import { getPosts } from '~/gql/getPosts.gql'
 import { searchPosts } from '~/gql/searchPosts.gql'
+import { getUserPosts } from '~/gql/getUserPosts.gql'
 import { getCurrentUser } from '~/gql/getCurrentUser.gql'
 import { signinUser } from '~/gql/signinUser.gql'
 import { signupUser } from '~/gql/signupUser.gql'
 import { addPost } from '~/gql/addPost.gql'
+import { updateUserPost } from '~/gql/updateUserPost.gql'
+import { deleteUserPost } from '~/gql/deleteUserPost.gql'
 import utils from '~/helpers/utils'
 
 export const state = () => ({
   posts: [],
+  userPosts: [],
   searchResults: [],
   user: null,
   loading: false,
@@ -30,6 +34,9 @@ export const mutations = {
   },
   setUser: (state, payload) => {
     state.user = payload
+  },
+  setUserPosts: (state, payload) => {
+    state.userPosts = payload
   },
   setLoading: (state, payload) => {
     state.loading = payload
@@ -61,13 +68,30 @@ export const actions = {
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       commit('setError', currentError)
-      console.error(utils.getFirstGraphQLError(error))
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
+    }
+    commit('setLoading', false)
+  },
+  async getUserPosts({ commit }, payload) {
+    commit('clearError')
+    commit('setLoading', true)
+    try {
+      const result = await this.app.apolloProvider.defaultClient.query({
+        query: getUserPosts,
+        variables: payload
+      })
+      commit('setUserPosts', result.data.getUserPosts)
+    } catch (error) {
+      const currentError = utils.getCurrentGraphQLError(error)
+      commit('setError', currentError)
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
     }
     commit('setLoading', false)
   },
   async searchPosts({ commit }, payload) {
     commit('clearError')
-    // commit('setLoading', true)
     try {
       const result = await this.app.apolloProvider.defaultClient.query({
         query: searchPosts,
@@ -77,9 +101,9 @@ export const actions = {
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       commit('setError', currentError)
-      console.error(utils.getFirstGraphQLError(error))
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
     }
-    // commit('setLoading', false)
   },
   async addPost({ commit }, payload) {
     commit('clearError')
@@ -99,7 +123,57 @@ export const actions = {
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       commit('setError', currentError)
-      console.error(utils.getFirstGraphQLError(error))
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
+    }
+    commit('setLoading', false)
+  },
+  async updateUserPost({ state, commit }, payload) {
+    commit('clearError')
+    commit('setLoading', true)
+    try {
+      const result = await this.app.apolloProvider.defaultClient.mutate({
+        mutation: updateUserPost,
+        variables: payload
+      })
+      const index = state.userPosts.findIndex(
+        post => post._id === result.data.updateUserPost._id
+      )
+      const userPosts = [
+        ...state.userPosts.slice(0, index),
+        result.data.updateUserPost,
+        ...state.userPosts.slice(index + 1)
+      ]
+      commit('setUserPosts', userPosts)
+    } catch (error) {
+      const currentError = utils.getCurrentGraphQLError(error)
+      commit('setError', currentError)
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
+    }
+    commit('setLoading', false)
+  },
+  async deleteUserPost({ state, commit }, payload) {
+    commit('clearError')
+    commit('setLoading', true)
+    try {
+      const result = await this.app.apolloProvider.defaultClient.mutate({
+        mutation: deleteUserPost,
+        variables: payload
+      })
+      const index = state.userPosts.findIndex(
+        post => post._id === result.data.updateUserPost._id
+      )
+      const userPosts = [
+        ...state.userPosts.slice(0, index),
+        ...state.userPosts.slice(index + 1)
+      ]
+      commit('setUserPosts', userPosts)
+    } catch (error) {
+      const currentError = utils.getCurrentGraphQLError(error)
+      commit('setError', currentError)
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
     }
     commit('setLoading', false)
   },
@@ -109,8 +183,11 @@ export const actions = {
     commit('clearUser')
   },
   async getCurrentUser({ commit, dispatch }) {
-    if (!utils.isJwtTokenValid(this.app.$apolloHelpers.getToken())) {
-      console.log('Invalid Token', this.app.i18n.t('sessionExpiredSignInAgain'))
+    const token = this.app.$apolloHelpers.getToken()
+    if (!token) {
+      return
+    }
+    if (!utils.isJwtTokenValid(token)) {
       commit('setAuthError', this.app.i18n.t('sessionExpiredSignInAgain'))
       await dispatch('logOut')
       return
@@ -126,14 +203,18 @@ export const actions = {
       commit('clearAuthError')
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
-      if (currentError === 'Unauthorized') {
-        console.log('Error', this.app.i18n.t('sessionExpiredSignInAgain'))
-        commit('setAuthError', this.app.i18n.t('sessionExpiredSignInAgain'))
+      if (process.env.NODE_ENV === 'development') console.log(currentError)
+      if (currentError && currentError.error === 'Unauthorized') {
+        const sessionExpiredSignInAgain = this.app.i18n.t(
+          'sessionExpiredSignInAgain'
+        )
+        commit('setAuthError', sessionExpiredSignInAgain)
         await dispatch('logOut')
       } else {
         commit('setError', currentError)
       }
-      console.error(utils.getFirstGraphQLError(error))
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
     }
     commit('setLoading', false)
   },
@@ -150,7 +231,8 @@ export const actions = {
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       commit('setError', currentError)
-      console.error(utils.getFirstGraphQLError(error))
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
     }
     commit('setLoading', false)
   },
@@ -167,7 +249,8 @@ export const actions = {
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       commit('setError', currentError)
-      console.error(utils.getFirstGraphQLError(error))
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
     }
     commit('setLoading', false)
   },
@@ -179,6 +262,7 @@ export const actions = {
 }
 export const getters = {
   posts: state => state.posts,
+  userPosts: state => state.userPosts,
   searchResults: state => state.searchResults,
   user: state => state.user,
   userFavorites: state => state.user && state.user.favorites,

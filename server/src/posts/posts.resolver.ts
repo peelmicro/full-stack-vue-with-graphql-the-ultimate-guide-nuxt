@@ -15,6 +15,11 @@ export class PostsResolver {
     return await this.postsService.getPosts();
   }
 
+  @Query(() => [Post], { nullable: true })
+  async getUserPosts(@Args({ name: 'userId', type: () => ID }) userId: string) {
+    return await this.postsService.getUserPosts(userId);
+  }
+
   @Query(() => Post)
   async getPost(@Args({ name: 'postId', type: () => ID }) postId: string) {
     return await this.postsService.getPost(postId);
@@ -50,6 +55,25 @@ export class PostsResolver {
   ) {
     const createdBy = creatorId;
     return await this.postsService.addPost({ title, imageUrl, categories, description, createdBy });
+  }
+
+  @Mutation(() => Post)
+  async updateUserPost(
+    @Args({ name: 'postId', type: () => ID }) postId: string,    
+    @Args({ name: 'userId', type: () => ID }) userId: string,
+    @Args('title') title: string,
+    @Args('imageUrl') imageUrl: string,
+    @Args({ name: 'categories', type: () => [String], nullable: "items" }) categories: string[],
+    @Args('description') description: string,
+  ) {
+    return await this.postsService.updateUserPost({ postId, userId, title, imageUrl, categories, description });
+  }
+
+  @Mutation(() => Post)
+  async deleteUserPost(
+    @Args({ name: 'postId', type: () => ID }) postId: string,    
+  ) {
+    return await this.postsService.deleteUserPost( postId );
   }
 
   @Mutation(() => Message)

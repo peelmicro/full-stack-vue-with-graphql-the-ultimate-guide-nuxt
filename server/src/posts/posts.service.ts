@@ -4,6 +4,7 @@ import { Post, Message } from './post.model';
 import { PostPage } from './types/post-page.type';
 import { LikesFaves } from './types/likes-faves.type';
 import { CreatePostDto } from './dtos/create-post.dto'
+import { UpdateUserPostDto } from './dtos/update-user-post.dto'
 import { CreatePostMessageDto } from './dtos/create-post-message.dto'
 import { ModelType, Ref } from 'typegoose';
 import { User } from '../users/user.model';
@@ -23,6 +24,13 @@ export class PostsService {
         model: "User"
       });
     return posts;
+  }
+
+  async getUserPosts(userId: string): Promise<Post[] | null> {
+      const posts = await this.postModel
+        .find({createdBy: userId })
+        .sort({ createdDate: "desc" });
+      return posts;      
   }
 
   async getPost(postId: string): Promise<Post | null> {
@@ -77,6 +85,22 @@ export class PostsService {
     return await newPost.save();
   }
 
+  async updateUserPost(updateUserPostDto: UpdateUserPostDto): Promise<Post> {
+    const { postId, userId, title, imageUrl, categories, description } = updateUserPostDto
+    const post = await this.postModel.findOneAndUpdate(
+      // Find post by postId and createdBy
+      { _id: postId, createdBy: userId },
+      { $set: { title, imageUrl, categories, description } },
+      { new: true }
+    );
+    return post;
+  }
+
+  async deleteUserPost(postId: string): Promise<Post> {
+    const post = await this.postModel.findOneAndRemove({ _id: postId });
+    return post;
+  }
+
   async addPostMessage(createPostMessageDto: CreatePostMessageDto): Promise<Ref<Message>> {
     const newMessage = {
       messageBody: createPostMessageDto.messageBody,
@@ -115,31 +139,31 @@ export class PostsService {
     const likesFaves: LikesFaves = {
       likes: post.likes,
       favorites: user.favorites
-    }    
+    }
     return likesFaves;
   }
 
   async unlikePost(postId: string, username: string): Promise<LikesFaves> {
-      // Find Post, add -1 to its 'like' value
-      const post = await this.postModel.findOneAndUpdate(
-        { _id: postId },
-        { $inc: { likes: -1 } },
-        { new: true }
-      );
-      // Find User, remove id of post from its favorites array (which will be populated as Posts)
-      const user = await this.userModel.findOneAndUpdate(
-        { username },
-        { $pull: { favorites: postId } },
-        { new: true }
-      ).populate({
-        path: "favorites",
-        model: "Post"
-      });
+    // Find Post, add -1 to its 'like' value
+    const post = await this.postModel.findOneAndUpdate(
+      { _id: postId },
+      { $inc: { likes: -1 } },
+      { new: true }
+    );
+    // Find User, remove id of post from its favorites array (which will be populated as Posts)
+    const user = await this.userModel.findOneAndUpdate(
+      { username },
+      { $pull: { favorites: postId } },
+      { new: true }
+    ).populate({
+      path: "favorites",
+      model: "Post"
+    });
     // Return only likes from 'post' and favorites from 'user'
     const likesFaves: LikesFaves = {
       likes: post.likes,
       favorites: user.favorites
-    }    
+    }
     return likesFaves;
-  }  
+  }
 }

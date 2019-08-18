@@ -112,9 +112,6 @@ export default {
           pageSize
         },
         updateQuery: (prevResult, { fetchMoreResult }) => {
-          console.log('previous result', prevResult.infiniteScrollPosts.posts)
-          console.log('fetch more result', fetchMoreResult)
-
           const newPosts = fetchMoreResult.infiniteScrollPosts.posts
           const hasMore = fetchMoreResult.infiniteScrollPosts.hasMore
           this.showMoreEnabled = hasMore

@@ -18,7 +18,7 @@ export class Message extends Typegoose {
   messageDate: Date;
 
   @Field(() => User)
-  @prop({ required: true, ref: User })
+  @prop({ required: true, ref: 'User' })
   messageUser: Ref<User>
 }
 
@@ -56,7 +56,7 @@ export class Post extends Typegoose {
   likes: number;
 
   @Field(() => User)
-  @prop({ required: true, ref: User })
+  @prop({ required: true, ref: 'User' })
   createdBy: Ref<User>
 
   @Field(() => [Message], { nullable: "itemsAndList" })

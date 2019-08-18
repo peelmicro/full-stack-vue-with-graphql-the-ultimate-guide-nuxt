@@ -162,8 +162,8 @@
           left
         >
           <v-icon class="mr-3">cancel</v-icon>
-          <h3>{{ authError.message }}</h3>
-          <v-btn dark flat :to="localePath('signin')">{{ $t('close') }}</v-btn>
+          <h3>{{ authError }}</h3>
+          <v-btn dark flat :to="localePath('signin')">{{ $t('signin') }}</v-btn>
         </v-snackbar>
       </v-container>
     </main>
@@ -247,6 +247,14 @@ export default {
         this.badgeAnimated = true
         setTimeout(() => (this.badgeAnimated = false), 1000)
       }
+    }
+  },
+  mounted() {
+    if (this.user) {
+      this.authSnackbar = true
+    }
+    if (this.authError !== null) {
+      this.authErrorSnackbar = true
     }
   },
   methods: {

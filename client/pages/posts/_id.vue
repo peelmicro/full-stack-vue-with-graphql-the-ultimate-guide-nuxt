@@ -215,7 +215,9 @@ export default {
           }
           this.$store.commit('setUser', updatedUser)
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          if (process.env.NODE_ENV === 'development') console.error(err)
+        })
     },
     handleUnlikePost() {
       const variables = {
@@ -246,7 +248,9 @@ export default {
           }
           this.$store.commit('setUser', updatedUser)
         })
-        .catch(err => console.error(err))
+        .catch(err => {
+          if (process.env.NODE_ENV === 'development') console.error(err)
+        })
     },
     handleAddPostMessage() {
       if (this.$refs.form.validate()) {
@@ -274,9 +278,10 @@ export default {
           })
           .then(({ data }) => {
             this.$refs.form.reset()
-            console.log(data.addPostMessage)
           })
-          .catch(err => console.error(err))
+          .catch(err => {
+            if (process.env.NODE_ENV === 'development') console.error(err)
+          })
       }
     },
     goToPreviousPage() {

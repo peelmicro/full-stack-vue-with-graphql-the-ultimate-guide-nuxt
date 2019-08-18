@@ -25,6 +25,8 @@ type Mutation {
   signinUser(password: String!, username: String!): Token!
   addPostWithInput(input: PostInput!): Post!
   addPost(creatorId: ID!, description: String!, categories: [String]!, imageUrl: String!, title: String!): Post!
+  updateUserPost(description: String!, categories: [String]!, imageUrl: String!, title: String!, userId: ID!, postId: ID!): Post!
+  deleteUserPost(postId: ID!): Post!
   addPostMessage(postId: ID!, userId: ID!, messageBody: String!): Message!
   likePost(username: String!, postId: ID!): LikesFaves!
   unlikePost(username: String!, postId: ID!): LikesFaves!
@@ -59,6 +61,7 @@ type Query {
   getCurrentUser: User!
   getUsers: [User!]!
   getPosts: [Post!]!
+  getUserPosts(userId: ID!): [Post!]
   getPost(postId: ID!): Post!
   searchPosts(searchTerm: String): [Post!]
   infiniteScrollPosts(pageSize: Int!, pageNum: Int!): PostPage!

@@ -38,7 +38,7 @@ export class User extends Typegoose {
 
   @IsArray()
   @Field(() => [Post], { nullable: "itemsAndList" })  
-  @arrayProp({ itemsRef: Post })
+  @arrayProp({ itemsRef: 'Post' })
   favorites?: Ref<Post>[]
 }
 

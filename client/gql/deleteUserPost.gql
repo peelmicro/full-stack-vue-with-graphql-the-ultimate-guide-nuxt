@@ -1,0 +1,5 @@
+mutation deleteUserPost($postId: ID!) {
+  deleteUserPost(postId: $postId) {
+    _id
+  }
+}

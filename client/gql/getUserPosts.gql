@@ -1,0 +1,11 @@
+query getUserPosts($userId: ID!) {
+  getUserPosts(userId: $userId) {
+    _id
+    title
+    imageUrl
+    description
+    categories
+    createdDate
+    likes
+  }
+}
