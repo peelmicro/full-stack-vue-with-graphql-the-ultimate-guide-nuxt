@@ -11,7 +11,9 @@
             <v-card-title primary-title>
               <div>
                 <div class="headline">{{ user.username }}</div>
-                <div>{{ $t('joined') }} {{ user.joinDate }}</div>
+                <div>
+                  {{ $t('joined') }} {{ $d(new Date(user.joinDate), 'short') }}
+                </div>
                 <div class="hidden-xs-only font-weight-thin">
                   {{ user.favorites.length }} {{ $t('favorites') }}
                 </div>
@@ -44,7 +46,11 @@
       <v-layout row wrap>
         <v-flex v-for="favorite in userFavorites" :key="favorite._id" sm6 xs12>
           <v-card class="mt-3 ml-1 mr-2" hover>
-            <v-img height="30vh" :src="favorite.imageUrl"></v-img>
+            <v-img
+              height="30vh"
+              :src="favorite.imageUrl"
+              @click="goToPost(favorite._id)"
+            ></v-img>
             <v-card-text>{{ favorite.title }}</v-card-text>
           </v-card>
         </v-flex>
@@ -84,7 +90,11 @@
               <v-icon>delete</v-icon>
             </v-btn>
 
-            <v-img height="30vh" :src="post.imageUrl"></v-img>
+            <v-img
+              height="30vh"
+              :src="post.imageUrl"
+              @click="goToPost(post._id)"
+            ></v-img>
             <v-card-text>{{ post.title }}</v-card-text>
           </v-card>
         </v-flex>
@@ -262,6 +272,9 @@ export default {
     this.handleGetUserPosts()
   },
   methods: {
+    goToPost(id) {
+      this.$router.push(`${this.localePath('posts')}/${id}`)
+    },
     handleGetUserPosts() {
       this.$store.dispatch('getUserPosts', {
         userId: this.user._id

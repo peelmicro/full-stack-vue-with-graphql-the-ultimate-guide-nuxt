@@ -39,7 +39,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@plugins/shared-components.js'],
+  plugins: ['@plugins/shared-components.js', '@plugins/i18n-moment.js'],
   /*
    ** Nuxt.js modules
    */
@@ -65,10 +65,43 @@ export default {
         defaultLocale: 'es',
         vueI18n: {
           fallbackLocale: 'es',
-          messages: { es, en }
+          messages: { es, en },
+          dateTimeFormats: {
+            es: {
+              short: {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              },
+              long: {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                weekday: 'short',
+                hour: 'numeric',
+                minute: 'numeric'
+              }
+            },
+            en: {
+              short: {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              },
+              long: {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                weekday: 'short',
+                hour: 'numeric',
+                minute: 'numeric'
+              }
+            }
+          }
         }
       }
     ],
+    ['@nuxtjs/moment', { locales: ['es'], defaultLocale: 'es' }],
     '@nuxtjs/vuetify',
     '@nuxtjs/pwa',
     '@nuxtjs/eslint-module',

@@ -49,8 +49,8 @@
                   }}</v-list-tile-title>
                   <v-list-tile-sub-title class="font-weight-thin"
                     >{{ $t('added') }}
-                    {{ post.createdDate }}</v-list-tile-sub-title
-                  >
+                    {{ $d(new Date(post.createdDate), 'short') }}
+                  </v-list-tile-sub-title>
                 </v-list-tile-content>
 
                 <v-list-tile-action>
@@ -79,53 +79,34 @@
 </template>
 
 <script>
-import { infiniteScrollPosts } from '~/gql/infiniteScrollPosts.gql'
-
-const pageSize = 2
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Posts',
   data() {
     return {
       pageNum: 1,
-      showMoreEnabled: true,
       showPostCreator: false
     }
   },
-  apollo: {
-    infiniteScrollPosts: {
-      query: infiniteScrollPosts,
-      variables: {
-        pageNum: 1,
-        pageSize
-      }
+  computed: {
+    ...mapGetters(['infiniteScrollPosts']),
+    showMoreEnabled() {
+      return this.infiniteScrollPosts && this.infiniteScrollPosts.hasMore
     }
   },
+  async asyncData({ store }) {
+    if (store.state.infiniteScrollPosts.posts.length === 0) {
+      await store.dispatch('getInfiniteScrollPosts')
+    }
+  },
+  // async mounted() {
+  //   await this.$store.dispatch('getInfiniteScrollPosts')
+  // },
   methods: {
     showMorePosts() {
       this.pageNum += 1
-      // fetch more data and transform original result
-      this.$apollo.queries.infiniteScrollPosts.fetchMore({
-        variables: {
-          // pageNum incremented by 1
-          pageNum: this.pageNum,
-          pageSize
-        },
-        updateQuery: (prevResult, { fetchMoreResult }) => {
-          const newPosts = fetchMoreResult.infiniteScrollPosts.posts
-          const hasMore = fetchMoreResult.infiniteScrollPosts.hasMore
-          this.showMoreEnabled = hasMore
-
-          return {
-            infiniteScrollPosts: {
-              __typename: prevResult.infiniteScrollPosts.__typename,
-              // Merge previous posts with new posts
-              posts: [...prevResult.infiniteScrollPosts.posts, ...newPosts],
-              hasMore
-            }
-          }
-        }
-      })
+      this.$store.dispatch('getInfiniteScrollPosts', this.pageNum)
     },
     goToPost(postId) {
       this.$router.push(`${this.localePath('posts')}/${postId}`)

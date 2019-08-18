@@ -62,5 +62,6 @@ export default {
   yourPosts: 'Sus Entradas',
   updatePost: 'Actualizar Entrada',
   update: 'Actualizar',
-  cancel: 'Cancelar'
+  cancel: 'Cancelar',
+  explorePosts: 'Explorar Entradas'
 }

@@ -60,5 +60,6 @@ export default {
   yourPosts: 'Your Posts',
   updatePost: 'Update Post',
   update: 'Update',
-  cancel: 'Cancel'
+  cancel: 'Cancel',
+  explorePosts: 'Explore Posts'
 }

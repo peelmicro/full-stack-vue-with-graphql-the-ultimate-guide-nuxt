@@ -106,7 +106,7 @@
                   <v-list-tile-sub-title>
                     {{ message.messageUser.username }}
                     <span class="grey--text text--lighten-1 hidden-xs-only">{{
-                      message.messageDate
+                      getTimeFromNow(message.messageDate)
                     }}</span>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
@@ -172,6 +172,9 @@ export default {
     ...mapGetters(['user', 'userFavorites'])
   },
   methods: {
+    getTimeFromNow(time) {
+      return this.$moment(new Date(time)).fromNow()
+    },
     checkIfPostLiked(postId) {
       // check if user favorites includes post with id of 'postId'
       this.postLiked =

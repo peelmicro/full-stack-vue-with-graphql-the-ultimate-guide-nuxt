@@ -1,4 +1,5 @@
 <template>
+  <!-- Loading Spinner -->
   <v-container text-xs-center>
     <v-layout row>
       <v-dialog v-model="loading" persistent fullscreen>
@@ -15,6 +16,16 @@
       </v-dialog>
     </v-layout>
 
+    <!-- Explore Posts Button -->
+    <v-layout v-if="!loading" class="mt-2 mb-3" row wrap>
+      <v-flex xs-12>
+        <v-btn class="secondary" to="/posts" large dark>
+          {{ $t('explorePosts') }}
+        </v-btn>
+      </v-flex>
+    </v-layout>
+
+    <!-- Posts Carrousel -->
     <v-flex xs12>
       <v-carousel
         v-if="!loading && posts.length > 0"
@@ -53,6 +64,7 @@ export default {
 <style>
 #carousel__title {
   position: absolute;
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   border-radius: 5px 5px 0 0;

@@ -1,4 +1,5 @@
 import { getPosts } from '~/gql/getPosts.gql'
+import { infiniteScrollPosts } from '~/gql/infiniteScrollPosts.gql'
 import { searchPosts } from '~/gql/searchPosts.gql'
 import { getUserPosts } from '~/gql/getUserPosts.gql'
 import { getCurrentUser } from '~/gql/getCurrentUser.gql'
@@ -11,6 +12,10 @@ import utils from '~/helpers/utils'
 
 export const state = () => ({
   posts: [],
+  infiniteScrollPosts: {
+    posts: [],
+    hasMore: false
+  },
   userPosts: [],
   searchResults: [],
   user: null,
@@ -21,6 +26,19 @@ export const state = () => ({
 export const mutations = {
   setPosts: (state, payload) => {
     state.posts = payload
+  },
+  setInfiniteScrollPosts: (state, payload) => {
+    const infiniteScrollPosts = state.infiniteScrollPosts.posts
+    state.infiniteScrollPosts = {
+      posts: [...infiniteScrollPosts, ...payload.posts],
+      hasMore: payload.hasMore
+    }
+  },
+  clearInfiniteScrollPosts: state => {
+    state.clearInfiniteScrollPosts = {
+      posts: [],
+      hasMore: false
+    }
   },
   setSearchResults: (state, payload) => {
     if (payload !== null && payload.length > 0) {
@@ -73,6 +91,29 @@ export const actions = {
     }
     commit('setLoading', false)
   },
+  async getInfiniteScrollPosts({ commit }, payload) {
+    const pageSize = 2
+    commit('clearError')
+    commit('setLoading', true)
+    try {
+      const pageNum = payload || 1
+      const variables = {
+        pageNum,
+        pageSize
+      }
+      const result = await this.app.apolloProvider.defaultClient.query({
+        query: infiniteScrollPosts,
+        variables
+      })
+      commit('setInfiniteScrollPosts', result.data.infiniteScrollPosts)
+    } catch (error) {
+      const currentError = utils.getCurrentGraphQLError(error)
+      commit('setError', currentError)
+      if (process.env.NODE_ENV === 'development')
+        console.error(utils.getFirstGraphQLError(error))
+    }
+    commit('setLoading', false)
+  },
   async getUserPosts({ commit }, payload) {
     commit('clearError')
     commit('setLoading', true)
@@ -105,7 +146,7 @@ export const actions = {
         console.error(utils.getFirstGraphQLError(error))
     }
   },
-  async addPost({ commit }, payload) {
+  async addPost({ commit, dispatch, state }, payload) {
     commit('clearError')
     commit('setLoading', true)
     try {
@@ -120,6 +161,10 @@ export const actions = {
         imageUrl
       }
       commit('addPost', newPost)
+      if (state.infiniteScrollPosts.posts.length > 0) {
+        commit('clearInfiniteSrollPosts')
+        await dispatch('getInfiniteScrollPosts')
+      }
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       commit('setError', currentError)
@@ -128,7 +173,7 @@ export const actions = {
     }
     commit('setLoading', false)
   },
-  async updateUserPost({ state, commit }, payload) {
+  async updateUserPost({ state, commit, dispatch }, payload) {
     commit('clearError')
     commit('setLoading', true)
     try {
@@ -145,6 +190,11 @@ export const actions = {
         ...state.userPosts.slice(index + 1)
       ]
       commit('setUserPosts', userPosts)
+      await dispatch('getPosts')
+      if (state.infiniteScrollPosts.posts.length > 0) {
+        commit('clearInfiniteSrollPosts')
+        await dispatch('getInfiniteScrollPosts')
+      }
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       commit('setError', currentError)
@@ -153,7 +203,7 @@ export const actions = {
     }
     commit('setLoading', false)
   },
-  async deleteUserPost({ state, commit }, payload) {
+  async deleteUserPost({ state, commit, dispatch }, payload) {
     commit('clearError')
     commit('setLoading', true)
     try {
@@ -169,6 +219,11 @@ export const actions = {
         ...state.userPosts.slice(index + 1)
       ]
       commit('setUserPosts', userPosts)
+      await dispatch('getPosts')
+      if (state.infiniteScrollPosts.posts.length > 0) {
+        commit('clearInfiniteSrollPosts')
+        await dispatch('getInfiniteScrollPosts')
+      }
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
       commit('setError', currentError)
@@ -203,7 +258,6 @@ export const actions = {
       commit('clearAuthError')
     } catch (error) {
       const currentError = utils.getCurrentGraphQLError(error)
-      if (process.env.NODE_ENV === 'development') console.log(currentError)
       if (currentError && currentError.error === 'Unauthorized') {
         const sessionExpiredSignInAgain = this.app.i18n.t(
           'sessionExpiredSignInAgain'
@@ -262,6 +316,7 @@ export const actions = {
 }
 export const getters = {
   posts: state => state.posts,
+  infiniteScrollPosts: state => state.infiniteScrollPosts,
   userPosts: state => state.userPosts,
   searchResults: state => state.searchResults,
   user: state => state.user,
