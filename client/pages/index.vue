@@ -19,7 +19,7 @@
     <!-- Explore Posts Button -->
     <v-layout v-if="!loading" class="mt-2 mb-3" row wrap>
       <v-flex xs-12>
-        <v-btn class="secondary" :to="localePath('post')" large dark>
+        <v-btn class="secondary" :to="localePath('posts')" large dark>
           {{ $t('explorePosts') }}
         </v-btn>
       </v-flex>
