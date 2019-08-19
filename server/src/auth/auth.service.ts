@@ -6,7 +6,7 @@ import { SigninUserDto } from '../users/dtos/signin-user.dto'
 import { CreateUserDto } from '../users/dtos/create-user.dto'
 import { Token, User } from '../users/user.model'
 import { JwtPayload } from './jwt-payload.interface'
-import md5 from 'md5';
+import md5 from 'md5'
 import * as bcrypt from 'bcrypt'
 
 @Injectable()
