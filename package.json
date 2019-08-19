@@ -4,6 +4,13 @@
   "description": "Source code for the NestJs and Nuxt version of the 'Full-Stack Vue with GraphQL - The Ultimate Guide' Udemy course.",
   "main": "index.js",
   "scripts": {
+    "heroku-prebuild": "npm run install:client && npm run install:server",
+    "install:client": "(cd client && npm install)",
+    "install:server": "(cd server && npm install)",
+    "build": "npm run build:client",
+    "build:client": "(cd client && npm run generate)",
+    "start": "npm run start:prod",
+    "start:prod": "(cd server && npm run start:prod)",    
     "server": "cd server && npm run start:dev",
     "client": "cd client && npm run dev",
     "dev": "concurrently --names \"server,client\" \"npm run server --silent\" \"npm run client --silent\""
