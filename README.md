@@ -6,6 +6,12 @@ Source code for the NestJs and Nuxt version of [Full-Stack Vue with GraphQL - Th
 
 - Rename the `fake.env` to `.env` on the server folder putting your own values
 
+## install main dependencies
+
+```bash
+$ npm install
+```
+
 ## install server dependencies
 
 ```bash
