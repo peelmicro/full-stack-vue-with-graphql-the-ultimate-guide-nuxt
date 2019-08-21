@@ -33,3 +33,18 @@ $npm install
 ```
 $ npm run dev
 ```
+
+## Within the code you can see how to:
+
+- Use NestJs with GraphQL and MongoDb to create powerful back ends applicaction.
+- Use Apollo Boost to create powerful full-stack apps.
+- Handle errors on the client and server with Apollo / GraphQL
+- Implement session-based JWT authentication to GraphQL applications
+- Integrate Apollo with Nuxt Vuex for more reliable and scalable state management
+- Implement infinite scrolling functionality using Vue-Apollo
+- Deploy full-stack JavaScript / GraphQL applications using Heroku.
+- Learn how to write queries and mutations in the GraphQL language on both the client and server
+- Make use of many useful MongoDB methods and features
+- Be able to create attractive, sophisticated UIs using the Vuetify CSS framework
+- Become more familiar with all the best ES6 / 7 features such as async / await, destructuring, spread operators, arrow functions, etc
+- Create a multi-language application using nuxt-i18n
